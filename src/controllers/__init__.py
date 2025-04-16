@@ -1,0 +1,1 @@
+# Este archivo permite que el directorio controllers se comporte como un paquete

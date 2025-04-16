@@ -1,0 +1,1 @@
+# Este archivo permite que el directorio raíz se comporte como un paquete
