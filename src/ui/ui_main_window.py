@@ -17,16 +17,23 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDateEdit, QFormLayout,
-    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSpacerItem, QStatusBar,
+    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QMainWindow, QMenu,
+    QMenuBar, QPushButton, QSizePolicy, QStatusBar,
     QTabWidget, QTableView, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.setWindowModality(Qt.WindowModality.NonModal)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setAnimated(True)
+        MainWindow.setDocumentMode(False)
         self.actionSalir = QAction(MainWindow)
         self.actionSalir.setObjectName(u"actionSalir")
         self.actionAcerca_de = QAction(MainWindow)
@@ -49,11 +56,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout_codigo_barra.setObjectName(u"horizontalLayout_codigo_barra")
         self.label_codigo_barra = QLabel(self.groupBox_formulario)
         self.label_codigo_barra.setObjectName(u"label_codigo_barra")
+        font = QFont()
+        font.setPointSize(13)
+        self.label_codigo_barra.setFont(font)
 
         self.horizontalLayout_codigo_barra.addWidget(self.label_codigo_barra)
 
         self.lineEdit_codigo_barra = QLineEdit(self.groupBox_formulario)
         self.lineEdit_codigo_barra.setObjectName(u"lineEdit_codigo_barra")
+        self.lineEdit_codigo_barra.setFont(font)
 
         self.horizontalLayout_codigo_barra.addWidget(self.lineEdit_codigo_barra)
 
@@ -66,43 +77,53 @@ class Ui_MainWindow(object):
         self.formLayout_datos.setObjectName(u"formLayout_datos")
         self.label_producto = QLabel(self.groupBox_formulario)
         self.label_producto.setObjectName(u"label_producto")
+        self.label_producto.setFont(font)
 
         self.formLayout_datos.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_producto)
 
         self.lineEdit_producto = QLineEdit(self.groupBox_formulario)
         self.lineEdit_producto.setObjectName(u"lineEdit_producto")
+        self.lineEdit_producto.setFont(font)
         self.lineEdit_producto.setReadOnly(True)
 
         self.formLayout_datos.setWidget(0, QFormLayout.ItemRole.FieldRole, self.lineEdit_producto)
 
         self.label_peso = QLabel(self.groupBox_formulario)
         self.label_peso.setObjectName(u"label_peso")
+        self.label_peso.setFont(font)
 
         self.formLayout_datos.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_peso)
 
         self.lineEdit_peso = QLineEdit(self.groupBox_formulario)
         self.lineEdit_peso.setObjectName(u"lineEdit_peso")
+        self.lineEdit_peso.setFont(font)
         self.lineEdit_peso.setReadOnly(True)
 
         self.formLayout_datos.setWidget(1, QFormLayout.ItemRole.FieldRole, self.lineEdit_peso)
 
         self.label_codigo_vendedor = QLabel(self.groupBox_formulario)
         self.label_codigo_vendedor.setObjectName(u"label_codigo_vendedor")
+        self.label_codigo_vendedor.setFont(font)
 
         self.formLayout_datos.setWidget(2, QFormLayout.ItemRole.LabelRole, self.label_codigo_vendedor)
 
         self.lineEdit_codigo_vendedor = QLineEdit(self.groupBox_formulario)
         self.lineEdit_codigo_vendedor.setObjectName(u"lineEdit_codigo_vendedor")
+        self.lineEdit_codigo_vendedor.setFont(font)
 
         self.formLayout_datos.setWidget(2, QFormLayout.ItemRole.FieldRole, self.lineEdit_codigo_vendedor)
 
         self.label_vendedor = QLabel(self.groupBox_formulario)
         self.label_vendedor.setObjectName(u"label_vendedor")
+        self.label_vendedor.setFont(font)
 
         self.formLayout_datos.setWidget(3, QFormLayout.ItemRole.LabelRole, self.label_vendedor)
 
         self.lineEdit_vendedor = QLineEdit(self.groupBox_formulario)
         self.lineEdit_vendedor.setObjectName(u"lineEdit_vendedor")
+        font1 = QFont()
+        font1.setPointSize(16)
+        self.lineEdit_vendedor.setFont(font1)
         self.lineEdit_vendedor.setReadOnly(True)
 
         self.formLayout_datos.setWidget(3, QFormLayout.ItemRole.FieldRole, self.lineEdit_vendedor)
@@ -110,28 +131,26 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_datos.addLayout(self.formLayout_datos)
 
-        self.verticalLayout_botones = QVBoxLayout()
-        self.verticalLayout_botones.setObjectName(u"verticalLayout_botones")
-        self.pushButton_limpiar = QPushButton(self.groupBox_formulario)
-        self.pushButton_limpiar.setObjectName(u"pushButton_limpiar")
-        self.pushButton_limpiar.setMinimumSize(QSize(100, 40))
-        self.pushButton_limpiar.setStyleSheet(u"background-color: rgb(255, 200, 150);")
-
-        self.verticalLayout_botones.addWidget(self.pushButton_limpiar)
-
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
         self.pushButton_guardar = QPushButton(self.groupBox_formulario)
         self.pushButton_guardar.setObjectName(u"pushButton_guardar")
         self.pushButton_guardar.setMinimumSize(QSize(100, 40))
+        self.pushButton_guardar.setFont(font)
         self.pushButton_guardar.setStyleSheet(u"background-color: rgb(150, 255, 150);")
 
-        self.verticalLayout_botones.addWidget(self.pushButton_guardar)
+        self.gridLayout.addWidget(self.pushButton_guardar, 1, 0, 1, 1)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.pushButton_limpiar = QPushButton(self.groupBox_formulario)
+        self.pushButton_limpiar.setObjectName(u"pushButton_limpiar")
+        self.pushButton_limpiar.setMinimumSize(QSize(100, 40))
+        self.pushButton_limpiar.setFont(font)
+        self.pushButton_limpiar.setStyleSheet(u"background-color: rgb(255, 200, 150);")
 
-        self.verticalLayout_botones.addItem(self.verticalSpacer)
+        self.gridLayout.addWidget(self.pushButton_limpiar, 0, 0, 1, 1)
 
 
-        self.horizontalLayout_datos.addLayout(self.verticalLayout_botones)
+        self.horizontalLayout_datos.addLayout(self.gridLayout)
 
 
         self.verticalLayout_formulario.addLayout(self.horizontalLayout_datos)
@@ -146,8 +165,13 @@ class Ui_MainWindow(object):
         self.tableView_registros = QTableView(self.groupBox_tabla)
         self.tableView_registros.setObjectName(u"tableView_registros")
         self.tableView_registros.setAlternatingRowColors(True)
-        self.tableView_registros.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.tableView_registros.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView_registros.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.tableView_registros.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tableView_registros.horizontalHeader().setVisible(True)
+        self.tableView_registros.horizontalHeader().setCascadingSectionResizes(False)
+        self.tableView_registros.horizontalHeader().setMinimumSectionSize(100)
+        self.tableView_registros.horizontalHeader().setDefaultSectionSize(150)
+        self.tableView_registros.verticalHeader().setDefaultSectionSize(30)
 
         self.verticalLayout_tabla.addWidget(self.tableView_registros)
 
@@ -238,7 +262,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 800, 21))
+        self.menubar.setGeometry(QRect(0, 0, 587, 22))
         self.menuArchivo = QMenu(self.menubar)
         self.menuArchivo.setObjectName(u"menuArchivo")
         self.menuAyuda = QMenu(self.menubar)
@@ -276,8 +300,8 @@ class Ui_MainWindow(object):
         self.lineEdit_codigo_vendedor.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Ingrese c\u00f3digo de vendedor...", None))
         self.label_vendedor.setText(QCoreApplication.translate("MainWindow", u"Vendedor:", None))
         self.lineEdit_vendedor.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Nombre del vendedor...", None))
-        self.pushButton_limpiar.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
         self.pushButton_guardar.setText(QCoreApplication.translate("MainWindow", u"Guardar", None))
+        self.pushButton_limpiar.setText(QCoreApplication.translate("MainWindow", u"Limpiar", None))
         self.groupBox_tabla.setTitle(QCoreApplication.translate("MainWindow", u"Registros Recientes", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_registro), QCoreApplication.translate("MainWindow", u"Registro de Pesaje", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("MainWindow", u"Filtros", None))

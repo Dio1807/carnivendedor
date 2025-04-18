@@ -8,13 +8,13 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QDate, Slot, QSortFilterProxyModel
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from .ui_main_window import Ui_MainWindow  # Este archivo se generará automáticamente desde el .ui
-
+from PySide6.QtWidgets import QHeaderView
 class MainWindow(QMainWindow):
+
     def __init__(self, controller):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        
         self.controller = controller
         
         # Modelos para las tablas
@@ -64,6 +64,13 @@ class MainWindow(QMainWindow):
         
         # Cargar datos iniciales
         self.cargar_datos_iniciales()
+
+        #Cargar las bolas de DIone
+        #self.ui.tableView_registros.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        #Cargar las bolas de RInyar
+        #self.ui.tableView_pesajes.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        #Cargar las bolas de LOdo
+        #self.ui.tableView_estadisticas.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
     
     def cargar_datos_iniciales(self):
         """Cargar datos iniciales en la UI"""
@@ -84,21 +91,16 @@ class MainWindow(QMainWindow):
         if len(codigo_completo) == 13 and codigo_completo.isdigit():
         # Extraer código de producto (primeros 7 dígitos)
             codigo_producto = codigo_completo[:7]
-        
         # Extraer información de peso (últimos 6 dígitos)
             info_peso = codigo_completo[7:]
-        
         # Los primeros 2 dígitos son kg (parte entera)
         # Los últimos 4 dígitos son gramos (parte decimal)
             kg = int(info_peso[:2])
             g = int(info_peso[2:])
-        
         # Calcular el peso en kg (kg + g/10000)
             peso = kg + (g / 10000)
-        
         # Buscar el producto y establecer el peso automáticamente
             self.controller.buscar_producto_por_codigo(codigo_producto)
-        
         # Establecer el peso calculado en el campo de peso
             self.ui.lineEdit_peso.setText(f"{peso:.4f}")
         else:
