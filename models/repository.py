@@ -179,6 +179,7 @@ class PesajeRepository(Repository):
         """
         return self.db.execute_query(query, (limit,))
     
+    # Colocar boton para cambiar de ASC A DESC EN ESTA Y LA SENTENCIA DE GET_BY_VENDEDOR
     def get_by_fechas(self, fecha_desde, fecha_hasta):
         """Obtiene pesajes entre dos fechas"""
         query = """
@@ -193,7 +194,7 @@ class PesajeRepository(Repository):
         WHERE 
             p.fecha_hora BETWEEN %s AND %s
         ORDER BY 
-            p.fecha_hora DESC
+            p.fecha_hora ASC
         """
         return self.db.execute_query(query, (fecha_desde, fecha_hasta))
     
@@ -211,7 +212,7 @@ class PesajeRepository(Repository):
         WHERE 
             p.codigo_vendedor = %s
         ORDER BY 
-            p.fecha_hora DESC
+            p.fecha_hora ASC
         LIMIT %s
         """
         return self.db.execute_query(query, (codigo_vendedor, limit))
