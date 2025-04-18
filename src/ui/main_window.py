@@ -54,6 +54,10 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_actualizar_estadisticas.clicked.connect(self.on_actualizar_estadisticas_clicked)
         self.ui.actionSalir.triggered.connect(self.close)
         self.ui.actionAcerca_de.triggered.connect(self.on_acerca_de)
+
+        # Conectar señal de filtrado prueba
+        self.ui.tabWidget.currentChanged.connect(self.on_tab_changed)
+
         
         # Configuraciones iniciales de la UI
         self.ui.tabWidget.setCurrentIndex(0)  # Comenzar en la pestaña de registro
@@ -74,11 +78,31 @@ class MainWindow(QMainWindow):
     @Slot()
     def on_codigo_barra_entered(self):
         """Manejar evento cuando se presiona Enter en el campo de código de barra"""
-        codigo = self.ui.lineEdit_codigo_barra.text().strip()
-        if codigo:
-            self.controller.buscar_producto_por_codigo(codigo)
+        codigo_completo = self.ui.lineEdit_codigo_barra.text().strip()
+    
+    # Verificar si el código tiene exactamente 13 dígitos
+        if len(codigo_completo) == 13 and codigo_completo.isdigit():
+        # Extraer código de producto (primeros 7 dígitos)
+            codigo_producto = codigo_completo[:7]
+        
+        # Extraer información de peso (últimos 6 dígitos)
+            info_peso = codigo_completo[7:]
+        
+        # Los primeros 2 dígitos son kg (parte entera)
+        # Los últimos 4 dígitos son gramos (parte decimal)
+            kg = int(info_peso[:2])
+            g = int(info_peso[2:])
+        
+        # Calcular el peso en kg (kg + g/10000)
+            peso = kg + (g / 10000)
+        
+        # Buscar el producto y establecer el peso automáticamente
+            self.controller.buscar_producto_por_codigo(codigo_producto)
+        
+        # Establecer el peso calculado en el campo de peso
+            self.ui.lineEdit_peso.setText(f"{peso:.4f}")
         else:
-            self.mostrar_error("Debe ingresar un código de barra válido")
+            self.mostrar_error("El código de barras debe tener exactamente 13 dígitos numéricos")
     
     @Slot()
     def on_codigo_vendedor_entered(self):
@@ -92,36 +116,42 @@ class MainWindow(QMainWindow):
     @Slot()
     def on_guardar_clicked(self):
         """Manejar evento para guardar el registro actual"""
-        codigo_producto = self.ui.lineEdit_codigo_barra.text().strip()
+        codigo_completo = self.ui.lineEdit_codigo_barra.text().strip()
         nombre_producto = self.ui.lineEdit_producto.text().strip()
         peso_str = self.ui.lineEdit_peso.text().strip()
         codigo_vendedor = self.ui.lineEdit_codigo_vendedor.text().strip()
         nombre_vendedor = self.ui.lineEdit_vendedor.text().strip()
-        
-        # Validaciones
-        if not codigo_producto:
+    
+    # Validaciones
+        if not codigo_completo:
             self.mostrar_error("Debe escanear o ingresar un código de producto")
             return
-        
+    
+    # Extraer solo los primeros 7 dígitos como código de producto
+        if len(codigo_completo) == 13 and codigo_completo.isdigit():
+            codigo_producto = codigo_completo[:7]
+        else:
+            codigo_producto = codigo_completo  # Si no tiene 13 dígitos, usar el código completo
+    
         if not nombre_producto:
             self.mostrar_error("El producto no es válido")
             return
-        
+    
         try:
             peso = float(peso_str)
         except ValueError:
             self.mostrar_error("El peso no es válido")
             return
-        
+    
         if not codigo_vendedor:
             self.mostrar_error("Debe ingresar un código de vendedor")
             return
-        
+    
         if not nombre_vendedor:
             self.mostrar_error("El vendedor no es válido")
             return
-        
-        # Mostrar confirmación
+    
+    # Mostrar confirmación
         confirmacion = QMessageBox.question(
             self,
             "Confirmar registro",
@@ -132,9 +162,9 @@ class MainWindow(QMainWindow):
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.Yes
         )
-        
+    
         if confirmacion == QMessageBox.Yes:
-            # Registrar el pesaje
+            # Registrar el pesaje con el código de producto correcto (7 dígitos)
             self.controller.registrar_pesaje(codigo_producto, peso, codigo_vendedor)
     
     @Slot()
@@ -161,6 +191,12 @@ class MainWindow(QMainWindow):
             # Filtrar por fechas
             self.controller.cargar_pesajes_por_fecha(fecha_desde, fecha_hasta + " 23:59:59")
     
+    @Slot()
+    def on_tab_changed(self, index):
+    # Compara si la pestaña activa es tab_historial
+        if self.ui.tabWidget.widget(index) == self.ui.tab_historial:
+            self.on_filtrar_clicked()
+
     @Slot()
     def on_exportar_clicked(self):
         """Exportar datos a un archivo CSV"""
@@ -241,14 +277,8 @@ class MainWindow(QMainWindow):
         """Actualizar los campos con la información del producto encontrado"""
         if producto:
             self.ui.lineEdit_producto.setText(producto["nombre"])
-            
-            # Generar un peso aleatorio para la simulación (esto debería venir de una báscula real)
-            # En un entorno de producción, este valor vendría de un dispositivo de pesaje conectado
-            import random
-            peso_simulado = round(random.uniform(0.5, 10.0), 2)  # Entre 0.5 y 10 kg
-            self.ui.lineEdit_peso.setText(str(peso_simulado))
-            
-            # Mover el foco al campo de código de vendedor
+                
+        # Mover el foco al campo de código de vendedor
             self.ui.lineEdit_codigo_vendedor.setFocus()
     
     @Slot(object)
@@ -257,6 +287,8 @@ class MainWindow(QMainWindow):
         if vendedor:
             nombre_completo = f"{vendedor['nombre']} {vendedor['apellido']}".strip()
             self.ui.lineEdit_vendedor.setText(nombre_completo)
+            self.ui.pushButton_guardar.setDefault(True)
+            self.ui.pushButton_guardar.setFocus()
     
     @Slot(str)
     def on_error_ocurrido(self, mensaje):
@@ -273,7 +305,7 @@ class MainWindow(QMainWindow):
             self.modelo_registros.insertRow(row)
             
             # Formatear la fecha/hora
-            fecha_hora = datetime.fromisoformat(pesaje['fecha_hora'])
+            fecha_hora = datetime.fromisoformat(str(pesaje['fecha_hora']))
             fecha_formateada = fecha_hora.strftime("%d/%m/%Y %H:%M")
             
             # Poblar la tabla
@@ -290,7 +322,7 @@ class MainWindow(QMainWindow):
             self.modelo_historial.insertRow(row)
             
             # Formatear la fecha/hora
-            fecha_hora = datetime.fromisoformat(pesaje['fecha_hora'])
+            fecha_hora = datetime.fromisoformat(str(pesaje['fecha_hora']))
             fecha_formateada = fecha_hora.strftime("%d/%m/%Y %H:%M")
             
             # Poblar la tabla

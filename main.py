@@ -8,7 +8,6 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QFile
 from src.ui.main_window import MainWindow
 from controllers.pesaje_controller import PesajeController
-from database.db_schema import initialize_schema
 from database.db_connector import DatabaseConnector
 
 # Configurar logging
@@ -23,14 +22,6 @@ def verificar_conexion_bd():
     """Verifica la conexión a la base de datos"""
     db = DatabaseConnector()
     return db.test_connection()
-
-def inicializar_base_datos():
-    """Inicializa la base de datos y sus tablas"""
-    try:
-        return initialize_schema()
-    except Exception as e:
-        logger.error(f"Error al inicializar la base de datos: {e}")
-        return False
 
 def main():
     """Función principal"""
@@ -51,17 +42,6 @@ def main():
             QMessageBox.Ok
         )
         return 1
-    
-    # Inicializar esquema de base de datos
-    """if not inicializar_base_datos():
-        QMessageBox.warning(
-            None,
-            "Advertencia",
-            "No se pudo inicializar completamente el esquema de la base de datos.\n"
-            "Es posible que algunas funciones no estén disponibles.",
-            QMessageBox.Ok
-        )
-        """
     
     # Inicializar controlador
     controller = PesajeController()
