@@ -2,16 +2,23 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
+  <property name="windowModality">
+   <enum>Qt::WindowModality::NonModal</enum>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Registro de Pesajes - Carnicería</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -35,6 +42,11 @@
             <layout class="QHBoxLayout" name="horizontalLayout_codigo_barra">
              <item>
               <widget class="QLabel" name="label_codigo_barra">
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Código de Barra:</string>
                </property>
@@ -42,6 +54,11 @@
              </item>
              <item>
               <widget class="QLineEdit" name="lineEdit_codigo_barra">
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                </font>
+               </property>
                <property name="placeholderText">
                 <string>Escanee o ingrese el código de barra...</string>
                </property>
@@ -55,6 +72,11 @@
               <layout class="QFormLayout" name="formLayout_datos">
                <item row="0" column="0">
                 <widget class="QLabel" name="label_producto">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Producto:</string>
                  </property>
@@ -62,6 +84,11 @@
                </item>
                <item row="0" column="1">
                 <widget class="QLineEdit" name="lineEdit_producto">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="readOnly">
                   <bool>true</bool>
                  </property>
@@ -72,6 +99,11 @@
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_peso">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Peso:</string>
                  </property>
@@ -79,6 +111,11 @@
                </item>
                <item row="1" column="1">
                 <widget class="QLineEdit" name="lineEdit_peso">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="readOnly">
                   <bool>true</bool>
                  </property>
@@ -89,6 +126,11 @@
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_codigo_vendedor">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Código V:</string>
                  </property>
@@ -96,6 +138,11 @@
                </item>
                <item row="2" column="1">
                 <widget class="QLineEdit" name="lineEdit_codigo_vendedor">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="placeholderText">
                   <string>Ingrese código de vendedor...</string>
                  </property>
@@ -103,6 +150,11 @@
                </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_vendedor">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Vendedor:</string>
                  </property>
@@ -110,6 +162,11 @@
                </item>
                <item row="3" column="1">
                 <widget class="QLineEdit" name="lineEdit_vendedor">
+                 <property name="font">
+                  <font>
+                   <pointsize>16</pointsize>
+                  </font>
+                 </property>
                  <property name="readOnly">
                   <bool>true</bool>
                  </property>
@@ -121,30 +178,19 @@
               </layout>
              </item>
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_botones">
-               <item>
-                <widget class="QPushButton" name="pushButton_limpiar">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(255, 200, 150);</string>
-                 </property>
-                 <property name="text">
-                  <string>Limpiar</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="1" column="0">
                 <widget class="QPushButton" name="pushButton_guardar">
                  <property name="minimumSize">
                   <size>
                    <width>100</width>
                    <height>40</height>
                   </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">background-color: rgb(150, 255, 150);</string>
@@ -154,18 +200,26 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="pushButton_limpiar">
+                 <property name="minimumSize">
                   <size>
-                   <width>20</width>
+                   <width>100</width>
                    <height>40</height>
                   </size>
                  </property>
-                </spacer>
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 200, 150);</string>
+                 </property>
+                 <property name="text">
+                  <string>Limpiar</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -186,11 +240,26 @@
               <bool>true</bool>
              </property>
              <property name="selectionMode">
-              <enum>QAbstractItemView::SingleSelection</enum>
+              <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
              </property>
              <property name="selectionBehavior">
-              <enum>QAbstractItemView::SelectRows</enum>
+              <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
              </property>
+             <attribute name="horizontalHeaderVisible">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderMinimumSectionSize">
+              <number>100</number>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>150</number>
+             </attribute>
+             <attribute name="verticalHeaderDefaultSectionSize">
+              <number>30</number>
+             </attribute>
             </widget>
            </item>
           </layout>
@@ -294,8 +363,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>21</height>
+     <width>587</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArchivo">
